@@ -5,32 +5,32 @@ import { ImageWithFallback } from './components/figma/ImageWithFallback';
 
 /* ─── Data ─────────────────────────────────────────────── */
 const carouselSlides = [
-  { src: "src/imports/image_(9).png", alt: "NIEX Classic Pack", label: "Classic Premium Pack", badge: "Best Seller" },
-  { src: "src/imports/Another_1.jpg", alt: "NIEX Special Edition", label: "Special Edition Pack", badge: "New Arrival" },
+  { src: "/imports/image_(9).png", alt: "NIEX Classic Pack", label: "Classic Premium Pack", badge: "Best Seller" },
+  { src: "/imports/Another_1.jpg", alt: "NIEX Special Edition", label: "Special Edition Pack", badge: "New Arrival" },
 ];
 
 const dryfruitsData = [
-  { src: "src/imports/image-11.png", name: "Almonds", color: "rgba(139,90,43,0.9)", accent: "#c87941", desc: "Rich in Vitamin E & healthy fats" },
-  { src: "src/imports/image-12.png", name: "Cashews", color: "rgba(210,180,140,0.9)", accent: "#e8c99a", desc: "High protein, iron & zinc" },
-  { src: "src/imports/image-13.png", name: "Pistachios", color: "rgba(107,142,35,0.9)", accent: "#a8c96a", desc: "Antioxidant powerhouse" },
-  { src: "src/imports/image-14.png", name: "Walnuts", color: "rgba(120,100,70,0.9)", accent: "#b8956f", desc: "Omega-3 for brain health" },
-  { src: "src/imports/image-15.png", name: "Raisins", color: "rgba(140,30,30,0.9)", accent: "#e05555", desc: "Natural energy & iron boost" },
+  { src: "/imports/image-11.png", name: "Almonds", color: "rgba(139,90,43,0.9)", accent: "#c87941", desc: "Rich in Vitamin E & healthy fats" },
+  { src: "/imports/image-12.png", name: "Cashews", color: "rgba(210,180,140,0.9)", accent: "#e8c99a", desc: "High protein, iron & zinc" },
+  { src: "/imports/image-13.png", name: "Pistachios", color: "rgba(107,142,35,0.9)", accent: "#a8c96a", desc: "Antioxidant powerhouse" },
+  { src: "/imports/image-14.png", name: "Walnuts", color: "rgba(120,100,70,0.9)", accent: "#b8956f", desc: "Omega-3 for brain health" },
+  { src: "/imports/image-15.png", name: "Raisins", color: "rgba(140,30,30,0.9)", accent: "#e05555", desc: "Natural energy & iron boost" },
 ];
 
 const ORBIT_FRUITS = [
-  { src: "src/imports/image-11.png", angle: 0, size: "w-11 sm:w-16 md:w-18" },
-  { src: "src/imports/image-12.png", angle: 72, size: "w-10 sm:w-14 md:w-16" },
-  { src: "src/imports/image-13.png", angle: 144, size: "w-11 sm:w-16 md:w-18" },
-  { src: "src/imports/image-14.png", angle: 216, size: "w-12 sm:w-17 md:w-20" },
-  { src: "src/imports/image-15.png", angle: 288, size: "w-9  sm:w-13 md:w-15" },
+  { src: "/imports/image-11.png", angle: 0, size: "w-11 sm:w-16 md:w-18" },
+  { src: "/imports/image-12.png", angle: 72, size: "w-10 sm:w-14 md:w-16" },
+  { src: "/imports/image-13.png", angle: 144, size: "w-11 sm:w-16 md:w-18" },
+  { src: "/imports/image-14.png", angle: 216, size: "w-12 sm:w-17 md:w-20" },
+  { src: "/imports/image-15.png", angle: 288, size: "w-9  sm:w-13 md:w-15" },
 ];
 
 const ORBIT_FRUITS_INNER = [
-  { src: "src/imports/image-15.png", angle: 36, size: "w-7 sm:w-10" },
-  { src: "src/imports/image-13.png", angle: 108, size: "w-7 sm:w-10" },
-  { src: "src/imports/image-11.png", angle: 180, size: "w-7 sm:w-10" },
-  { src: "src/imports/image-14.png", angle: 252, size: "w-7 sm:w-10" },
-  { src: "src/imports/image-12.png", angle: 324, size: "w-7 sm:w-10" },
+  { src: "/imports/image-15.png", angle: 36, size: "w-7 sm:w-10" },
+  { src: "/imports/image-13.png", angle: 108, size: "w-7 sm:w-10" },
+  { src: "/imports/image-11.png", angle: 180, size: "w-7 sm:w-10" },
+  { src: "/imports/image-14.png", angle: 252, size: "w-7 sm:w-10" },
+  { src: "/imports/image-12.png", angle: 324, size: "w-7 sm:w-10" },
 ];
 
 /* ─── Helpers ───────────────────────────────────────────── */
@@ -115,12 +115,12 @@ function Particles() {
 function ScrollFruits() {
   const { scrollY } = useScroll();
   const fruits = [
-    { src: "src/imports/image-11.png", x: "5%", side: -1, baseY: 200, size: "w-12 sm:w-16 md:w-20" },
-    { src: "src/imports/image-12.png", x: "88%", side: 1, baseY: 300, size: "w-10 sm:w-14 md:w-18" },
-    { src: "src/imports/image-13.png", x: "10%", side: 1, baseY: 600, size: "w-10 sm:w-14 md:w-16" },
-    { src: "src/imports/image-14.png", x: "85%", side: -1, baseY: 800, size: "w-12 sm:w-16 md:w-20" },
-    { src: "src/imports/image-15.png", x: "7%", side: -1, baseY: 1100, size: "w-8  sm:w-12 md:w-14" },
-    { src: "src/imports/image-11.png", x: "87%", side: 1, baseY: 1400, size: "w-11 sm:w-15 md:w-18" },
+    { src: "/imports/image-11.png", x: "5%", side: -1, baseY: 200, size: "w-12 sm:w-16 md:w-20" },
+    { src: "/imports/image-12.png", x: "88%", side: 1, baseY: 300, size: "w-10 sm:w-14 md:w-18" },
+    { src: "/imports/image-13.png", x: "10%", side: 1, baseY: 600, size: "w-10 sm:w-14 md:w-16" },
+    { src: "/imports/image-14.png", x: "85%", side: -1, baseY: 800, size: "w-12 sm:w-16 md:w-20" },
+    { src: "/imports/image-15.png", x: "7%", side: -1, baseY: 1100, size: "w-8  sm:w-12 md:w-14" },
+    { src: "/imports/image-11.png", x: "87%", side: 1, baseY: 1400, size: "w-11 sm:w-15 md:w-18" },
   ];
   return (
     <div className="fixed inset-0 pointer-events-none z-10 overflow-hidden">
@@ -159,7 +159,7 @@ function Logo() {
         <div className="relative bg-black/80 backdrop-blur-sm rounded-full p-1 border-2 border-amber-400/60 shadow-2xl"
           style={{ boxShadow: "0 0 20px rgba(217,119,6,0.4), 0 0 40px rgba(6,182,212,0.1)" }}>
           <ImageWithFallback
-            src="src/imports/10a76b3a-2015-426a-a9d4-96654e51fe23_(1).jpg"
+            src="/imports/10a76b3a-2015-426a-a9d4-96654e51fe23_(1).jpg"
             alt="NIEX Logo"
             className="w-full h-full object-cover rounded-full"
           />
@@ -656,7 +656,7 @@ function ContactSection() {
             }}
           >
             <div className="absolute top-2 right-2 w-14 opacity-10">
-              <ImageWithFallback src="src/imports/image-11.png" alt="" className="w-full h-auto" />
+              <ImageWithFallback src="/imports/image-11.png" alt="" className="w-full h-auto" />
             </div>
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center"
@@ -694,7 +694,7 @@ function ContactSection() {
             }}
           >
             <div className="absolute top-2 right-2 w-14 opacity-10">
-              <ImageWithFallback src="src/imports/image-12.png" alt="" className="w-full h-auto" />
+              <ImageWithFallback src="/imports/image-12.png" alt="" className="w-full h-auto" />
             </div>
             <h3 className="text-cyan-300 font-black text-base sm:text-lg mb-5">Connect With Us</h3>
             <div className="flex flex-col gap-3">
@@ -805,8 +805,8 @@ function BuyModal({ quantity, setQuantity, onClose }: { quantity: number; setQua
         onClick={e => e.stopPropagation()}
       >
         {/* Decorative corner fruits */}
-        <div className="absolute top-0 right-0 w-16 opacity-15"><ImageWithFallback src="src/imports/image-11.png" alt="" className="w-full h-auto" /></div>
-        <div className="absolute bottom-0 left-0 w-14 opacity-15"><ImageWithFallback src="src/imports/image-12.png" alt="" className="w-full h-auto" /></div>
+        <div className="absolute top-0 right-0 w-16 opacity-15"><ImageWithFallback src="/imports/image-11.png" alt="" className="w-full h-auto" /></div>
+        <div className="absolute bottom-0 left-0 w-14 opacity-15"><ImageWithFallback src="/imports/image-12.png" alt="" className="w-full h-auto" /></div>
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_40%_at_50%_0%,rgba(217,119,6,0.1),transparent_60%)]" />
 
         <h3 className="text-2xl sm:text-3xl font-black text-white text-center mb-6 relative z-10"
@@ -1128,7 +1128,7 @@ export default function App() {
               animate={{ y: [0, -8, 0], rotate: [0, i % 2 === 0 ? 8 : -8, 0] }}
               transition={{ duration: 3 + i * 0.4, repeat: Infinity, delay: i * 0.3 }}
             >
-              <ImageWithFallback src={`src/imports/${img}`} alt="" className="w-full h-auto" />
+              <ImageWithFallback src={`/imports/${img}`} alt="" className="w-full h-auto" />
             </motion.div>
           ))}
         </div>
