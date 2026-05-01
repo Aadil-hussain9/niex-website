@@ -198,7 +198,7 @@ function HeroCarousel() {
 
   return (
     <motion.div
-      className="relative z-30 w-64 sm:w-80 md:w-96 lg:w-[26rem] xl:w-[28rem]"
+      className="relative z-30 w-80 sm:w-96 md:w-[28rem] lg:w-[32rem] xl:w-[36rem]"
       initial={{ opacity: 0, scale: 0.6, y: 60 }}
       animate={{ opacity: 1, scale: 1, y: 0 }}
       transition={{ delay: 1, duration: 1.4, type: "spring", stiffness: 90 }}
