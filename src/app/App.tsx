@@ -668,7 +668,7 @@ function ContactSection() {
             <p className="text-amber-100/70 text-sm leading-relaxed mb-5">
               178/92, Haider Mirza Rd, Golaganj<br />
               Kaiser Bagh, Lucknow – 226018<br />
-              <span className="text-amber-400/60 text-xs">(Near Rocket Dyer, Chabati Churaha)</span>
+              <span className="text-amber-400/60 text-xs">(Near Rocket Dyer, Char-bati Churaha)</span>
             </p>
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-lg bg-amber-500/20 border border-amber-500/30 flex items-center justify-center">
@@ -759,181 +759,218 @@ function BuyModal({ quantity, setQuantity, onClose }: { quantity: number; setQua
     onClose();
   };
 
-  const inputStyle: React.CSSProperties = {
+  /* ── Geolocation ── */
+  const [locLoading, setLocLoading] = useState(false);
+  const [locError, setLocError] = useState("");
+
+  const detectLocation = () => {
+    if (!navigator.geolocation) {
+      setLocError("Geolocation not supported by your browser.");
+      return;
+    }
+    setLocLoading(true);
+    setLocError("");
+    navigator.geolocation.getCurrentPosition(
+      async (pos) => {
+        try {
+          const { latitude: lat, longitude: lon } = pos.coords;
+          const res = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`,
+            { headers: { "Accept-Language": "en" } }
+          );
+          const data = await res.json();
+          const a = data.address || {};
+          const parts = [
+            a.road || a.pedestrian || a.suburb,
+            a.neighbourhood || a.quarter,
+            a.city || a.town || a.village || a.county,
+            a.state,
+            a.postcode,
+          ].filter(Boolean);
+          setAddress(parts.join(", "));
+        } catch {
+          setLocError("Could not fetch address. Fill manually.");
+        } finally {
+          setLocLoading(false);
+        }
+      },
+      () => {
+        setLocLoading(false);
+        setLocError("Location access denied. Please fill manually.");
+      },
+      { timeout: 8000 }
+    );
+  };
+
+  const inp: React.CSSProperties = {
     background: "rgba(255,255,255,0.05)",
-    border: "1px solid rgba(251,191,36,0.25)",
-    borderRadius: "12px",
+    border: "1px solid rgba(251,191,36,0.22)",
+    borderRadius: "10px",
     color: "#fff",
-    fontSize: "14px",
+    fontSize: "13px",
     width: "100%",
-    padding: "10px 14px",
+    padding: "8px 12px",
     outline: "none",
     fontFamily: "inherit",
     boxSizing: "border-box",
   };
-  const labelStyle: React.CSSProperties = {
-    color: "rgba(251,191,36,0.6)",
-    fontSize: "10px",
+  const lbl: React.CSSProperties = {
+    color: "rgba(251,191,36,0.55)",
+    fontSize: "9px",
     letterSpacing: "0.15em",
     textTransform: "uppercase",
     display: "block",
-    marginBottom: "6px",
+    marginBottom: "4px",
   };
 
   return (
     <motion.div
-      className="fixed inset-0 z-[100] flex items-center justify-center p-4"
-      style={{ background: "rgba(0,0,0,0.85)", backdropFilter: "blur(8px)" }}
+      className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center"
+      style={{ background: "rgba(0,0,0,0.82)", backdropFilter: "blur(8px)" }}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       onClick={onClose}
     >
       <motion.div
-        className="relative w-full max-w-sm rounded-3xl p-6 sm:p-8 overflow-hidden"
+        className="relative w-full sm:max-w-sm rounded-t-3xl sm:rounded-3xl overflow-hidden"
         style={{
           background: "linear-gradient(160deg, #1c0a00, #0d0500)",
-          border: "1.5px solid rgba(251,191,36,0.4)",
-          boxShadow: "0 0 60px rgba(217,119,6,0.4), 0 0 120px rgba(217,119,6,0.1)",
-          maxHeight: "90vh",
-          overflowY: "auto",
+          border: "1.5px solid rgba(251,191,36,0.35)",
+          boxShadow: "0 0 50px rgba(217,119,6,0.35)",
+          maxHeight: "96vh",
+          display: "flex",
+          flexDirection: "column",
         }}
-        initial={{ scale: 0.6, y: 100 }}
-        animate={{ scale: 1, y: 0 }}
-        exit={{ scale: 0.8, y: 60 }}
-        transition={{ type: "spring", stiffness: 220 }}
+        initial={{ y: "100%" }}
+        animate={{ y: 0 }}
+        exit={{ y: "100%" }}
+        transition={{ type: "spring", stiffness: 260, damping: 28 }}
         onClick={e => e.stopPropagation()}
       >
-        {/* Decorative corner fruits */}
-        <div className="absolute top-0 right-0 w-16 opacity-15"><ImageWithFallback src="/imports/image-11.png" alt="" className="w-full h-auto" /></div>
-        <div className="absolute bottom-0 left-0 w-14 opacity-15"><ImageWithFallback src="/imports/image-12.png" alt="" className="w-full h-auto" /></div>
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_40%_at_50%_0%,rgba(217,119,6,0.1),transparent_60%)]" />
+        {/* Decorative glow */}
+        <div className="absolute top-0 right-0 w-14 opacity-10 pointer-events-none">
+          <ImageWithFallback src="/imports/image-11.png" alt="" className="w-full h-auto" />
+        </div>
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_35%_at_50%_0%,rgba(217,119,6,0.1),transparent_60%)] pointer-events-none" />
 
-        <h3 className="text-2xl sm:text-3xl font-black text-white text-center mb-6 relative z-10"
-          style={{ textShadow: "0 0 20px rgba(251,191,36,0.5)" }}>
-          ⬡ Order Now
-        </h3>
+        {/* ── Scrollable body ── */}
+        <div className="relative z-10 overflow-y-auto flex-1 p-4 sm:p-5 space-y-3">
 
-        <div className="relative z-10 space-y-4">
-          {/* Price row */}
-          <div className="flex items-center justify-between p-4 rounded-2xl"
-            style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(251,191,36,0.15)" }}>
-            <div>
-              <p className="text-amber-300/70 text-xs mb-0.5">Per 500g Pack</p>
-              <p className="text-4xl font-black text-white">₹{PRICE_PER_PACK}</p>
-              <p className="text-amber-100/40 text-xs mt-0.5">Premium Kashmiri Mix</p>
-            </div>
-            <div className="text-right">
-              <div
-                className="inline-block px-3 py-1.5 rounded-full text-xs font-black text-white mb-1"
-                style={{ background: "linear-gradient(135deg,#d97706,#b45309)" }}
-              >
-                500g / Pack
-              </div>
-            </div>
+          {/* Header */}
+          <div className="flex items-center justify-between mb-1">
+            <h3 className="text-xl font-black text-white" style={{ textShadow: "0 0 16px rgba(251,191,36,0.5)" }}>
+              ⬡ Order Now
+            </h3>
+            <button onClick={onClose} className="text-amber-200/40 hover:text-amber-200/80 transition-colors text-lg leading-none">✕</button>
           </div>
 
-          {/* Quantity */}
-          <div>
-            <label style={labelStyle}>Quantity (packs)</label>
-            <div className="flex items-center gap-4">
+          {/* Price + Quantity + Total — single compact row */}
+          <div className="flex items-center gap-3 p-3 rounded-2xl"
+            style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(251,191,36,0.15)" }}>
+            <div className="flex-1">
+              <p className="text-amber-300/60 text-[10px] mb-0.5">Per 500g Pack</p>
+              <p className="text-3xl font-black text-white leading-none">₹{PRICE_PER_PACK}</p>
+            </div>
+            <div className="flex items-center gap-2">
               <button
                 onClick={() => setQuantity((q: number) => Math.max(1, q - 1))}
-                className="w-11 h-11 rounded-xl font-black text-xl text-white flex items-center justify-center"
-                style={{ background: "rgba(217,119,6,0.2)", border: "1px solid rgba(217,119,6,0.4)" }}
+                className="w-9 h-9 rounded-xl font-black text-lg text-white flex items-center justify-center"
+                style={{ background: "rgba(217,119,6,0.25)", border: "1px solid rgba(217,119,6,0.4)" }}
               >−</button>
-              <span className="flex-1 text-center text-3xl font-black text-white">{quantity}</span>
+              <span className="w-6 text-center text-xl font-black text-white">{quantity}</span>
               <button
                 onClick={() => setQuantity((q: number) => q + 1)}
-                className="w-11 h-11 rounded-xl font-black text-xl text-white flex items-center justify-center"
-                style={{ background: "rgba(217,119,6,0.2)", border: "1px solid rgba(217,119,6,0.4)" }}
+                className="w-9 h-9 rounded-xl font-black text-lg text-white flex items-center justify-center"
+                style={{ background: "rgba(217,119,6,0.25)", border: "1px solid rgba(217,119,6,0.4)" }}
               >+</button>
             </div>
-          </div>
-
-          {/* Total */}
-          <div className="p-3 rounded-2xl" style={{ background: "rgba(217,119,6,0.08)", border: "1px solid rgba(217,119,6,0.2)" }}>
-            <p className="text-amber-300/60 text-xs mb-1">Total Amount ({quantity} × 500g)</p>
-            <p className="text-3xl font-black text-white">₹{PRICE_PER_PACK * quantity}</p>
-          </div>
-
-          {/* ── Customer Details ── */}
-          <div style={{ borderTop: "1px solid rgba(251,191,36,0.1)", paddingTop: "12px" }}>
-            <p className="text-amber-300/80 text-xs font-black tracking-widest uppercase mb-3">📋 Your Details <span className="text-red-400 normal-case tracking-normal font-normal">(all fields required)</span></p>
-
-            {/* Name */}
-            <div className="mb-3">
-              <label style={labelStyle}>Full Name <span style={{ color: "#f87171" }}>*</span></label>
-              <input
-                id="order-name"
-                type="text"
-                placeholder="Enter your name"
-                value={name}
-                onChange={e => setName(e.target.value)}
-                style={inputStyle}
-              />
-            </div>
-
-            {/* Phone */}
-            <div className="mb-3">
-              <label style={labelStyle}>WhatsApp / Phone Number <span style={{ color: "#f87171" }}>*</span></label>
-              <input
-                id="order-phone"
-                type="tel"
-                placeholder="e.g. 9876543210"
-                value={phone}
-                onChange={e => setPhone(e.target.value)}
-                style={inputStyle}
-              />
-            </div>
-
-            {/* Address */}
-            <div className="mb-1">
-              <label style={labelStyle}>Delivery Address <span style={{ color: "#f87171" }}>*</span></label>
-              <textarea
-                id="order-address"
-                placeholder="House no., street, city, pincode…"
-                value={address}
-                onChange={e => setAddress(e.target.value)}
-                rows={3}
-                style={{ ...inputStyle, resize: "none" }}
-              />
+            <div className="text-right min-w-[60px]">
+              <p className="text-amber-300/50 text-[9px]">Total</p>
+              <p className="text-lg font-black text-amber-300">₹{PRICE_PER_PACK * quantity}</p>
             </div>
           </div>
 
-          {/* Helper hint */}
+          {/* Divider */}
+          <div style={{ borderTop: "1px solid rgba(251,191,36,0.1)" }} />
+
+          {/* Name */}
+          <div>
+            <label style={lbl}>Full Name <span style={{ color: "#f87171" }}>*</span></label>
+            <input id="order-name" type="text" placeholder="Enter your name"
+              value={name} onChange={e => setName(e.target.value)} style={inp} />
+          </div>
+
+          {/* Phone */}
+          <div>
+            <label style={lbl}>WhatsApp / Phone <span style={{ color: "#f87171" }}>*</span></label>
+            <input id="order-phone" type="tel" placeholder="e.g. 9876543210"
+              value={phone} onChange={e => setPhone(e.target.value)} style={inp} />
+          </div>
+
+          {/* Address with auto-detect */}
+          <div>
+            <div className="flex items-center justify-between mb-1">
+              <label style={{ ...lbl, marginBottom: 0 }}>
+                Delivery Address <span style={{ color: "#f87171" }}>*</span>
+              </label>
+              <button
+                onClick={detectLocation}
+                disabled={locLoading}
+                className="flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] font-bold transition-all"
+                style={{
+                  background: locLoading ? "rgba(6,182,212,0.08)" : "rgba(6,182,212,0.15)",
+                  border: "1px solid rgba(6,182,212,0.35)",
+                  color: locLoading ? "rgba(6,182,212,0.5)" : "#22d3ee",
+                  cursor: locLoading ? "not-allowed" : "pointer",
+                }}
+              >
+                {locLoading
+                  ? <motion.span animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: "linear" }} style={{ display: "inline-block" }}>⟳</motion.span>
+                  : "📍"
+                }
+                {" "}{locLoading ? "Detecting…" : "Auto-detect"}
+              </button>
+            </div>
+            {locError && <p className="text-red-400/80 text-[10px] mb-1">{locError}</p>}
+            <textarea
+              id="order-address"
+              placeholder="House no., street, city, pincode…"
+              value={address}
+              onChange={e => setAddress(e.target.value)}
+              rows={2}
+              style={{ ...inp, resize: "none" }}
+            />
+          </div>
+
+          {/* Helper */}
           {!isFormValid && (
-            <p className="text-amber-400/60 text-xs text-center">
-              Fill in all fields above to enable the WhatsApp button
-            </p>
+            <p className="text-amber-400/50 text-[10px] text-center">Fill all fields to enable the WhatsApp button</p>
           )}
 
-          {/* CTA — WhatsApp */}
+          {/* CTA */}
           <motion.button
             id="confirm-whatsapp-btn"
             disabled={!isFormValid}
-            className="w-full py-4 rounded-xl font-black text-base flex items-center justify-center gap-2 transition-all duration-300"
+            className="w-full py-3.5 rounded-xl font-black text-sm flex items-center justify-center gap-2 transition-all duration-300"
             style={isFormValid ? {
               background: "linear-gradient(135deg, #16a34a, #059669)",
-              boxShadow: "0 4px 28px rgba(22,163,74,0.6), 0 0 0 1px rgba(34,197,94,0.4)",
-              color: "#fff",
-              cursor: "pointer",
+              boxShadow: "0 4px 24px rgba(22,163,74,0.55), 0 0 0 1px rgba(34,197,94,0.35)",
+              color: "#fff", cursor: "pointer",
             } : {
-              background: "rgba(255,255,255,0.06)",
-              boxShadow: "none",
-              color: "rgba(255,255,255,0.25)",
+              background: "rgba(255,255,255,0.05)",
+              color: "rgba(255,255,255,0.2)",
               cursor: "not-allowed",
-              border: "1px solid rgba(255,255,255,0.08)",
+              border: "1px solid rgba(255,255,255,0.07)",
             }}
             whileHover={isFormValid ? { scale: 1.02 } : {}}
             whileTap={isFormValid ? { scale: 0.97 } : {}}
             onClick={handleConfirm}
           >
-            <MessageCircle className="w-5 h-5" />
+            <MessageCircle className="w-4 h-4" />
             {isFormValid ? "Send Order on WhatsApp" : "Complete the form to order"}
           </motion.button>
 
-          <p className="text-center text-amber-200/50 text-xs">✓ Free Shipping  •  ✓ COD Available  •  ✓ Premium Quality</p>
 
           <button
             onClick={onClose}
@@ -986,7 +1023,7 @@ export default function App() {
       <Logo />
 
       {/* ── HERO ── */}
-      <section className="relative min-h-screen flex flex-col items-center justify-center px-4 pt-16 pb-10 z-20">
+      <section className="relative min-h-screen flex flex-col items-center justify-start px-4 pt-6 sm:pt-8 pb-10 z-20">
 
         {/* Header text */}
         <motion.div
