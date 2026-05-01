@@ -643,7 +643,56 @@ function ContactSection() {
           </h2>
         </motion.div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
+          {/* Packaged & Marketed by — full-width banner */}
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.7 }}
+            className="md:col-span-2 relative rounded-2xl px-5 sm:px-7 py-4 flex flex-col sm:flex-row items-start sm:items-center gap-3 overflow-hidden"
+            style={{
+              background: "linear-gradient(135deg, rgba(6,182,212,0.07), rgba(217,119,6,0.1))",
+              border: "1px solid rgba(251,191,36,0.25)",
+              backdropFilter: "blur(16px)",
+            }}
+          >
+            {/* Shimmer sweep */}
+            <motion.div
+              className="absolute inset-0 pointer-events-none"
+              style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.04), transparent)" }}
+              animate={{ x: ["-100%", "200%"] }}
+              transition={{ duration: 3.5, repeat: Infinity, ease: "linear" }}
+            />
+            {/* Icon */}
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+              style={{ background: "rgba(251,191,36,0.12)", border: "1px solid rgba(251,191,36,0.28)", boxShadow: "0 0 16px rgba(251,191,36,0.2)" }}>
+              <span className="text-lg">📦</span>
+            </div>
+            {/* Text */}
+            <div className="relative z-10">
+              <p className="text-amber-400/60 text-[10px] font-black tracking-[0.3em] uppercase mb-0.5">
+                Packaged &amp; Marketed by
+              </p>
+              <p
+                className="font-black text-2xl sm:text-3xl leading-tight"
+                style={{
+                  fontFamily: "'Playfair Display', 'Georgia', serif",
+                  background: "linear-gradient(135deg, #fde68a, #f59e0b, #fbbf24)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  filter: "drop-shadow(0 0 10px rgba(251,191,36,0.5))",
+                  letterSpacing: "0.08em",
+                }}
+              >
+                NIEX
+              </p>
+              <p className="text-amber-100/70 text-sm mt-0.5">
+                J&amp;K, Kulgam, Kashmir, India – 192231
+              </p>
+            </div>
+          </motion.div>
+
           {/* Address card */}
+
           <motion.div
             initial={{ opacity: 0, x: -40 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
@@ -701,7 +750,7 @@ function ContactSection() {
               {[
                 { href: "https://wa.me/7006994026", icon: MessageCircle, label: "WhatsApp", bg: "from-green-600 to-emerald-600", glow: "rgba(34,197,94,0.4)" },
                 { href: "https://instagram.com/niex_dryfruits", icon: Instagram, label: "Instagram", bg: "from-pink-600 to-purple-600", glow: "rgba(219,39,119,0.4)" },
-                { href: "https://facebook.com/niex", icon: Facebook, label: "Facebook", bg: "from-blue-600 to-indigo-600", glow: "rgba(37,99,235,0.4)" },
+                { href: "https://www.facebook.com/share/17SmAkq58L/", icon: Facebook, label: "Facebook", bg: "from-blue-600 to-indigo-600", glow: "rgba(37,99,235,0.4)" },
               ].map(s => (
                 <motion.a
                   key={s.label}
