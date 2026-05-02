@@ -811,14 +811,43 @@ function BuyModal({ quantity, setQuantity, onClose }: { quantity: number; setQua
   /* ── Geolocation ── */
   const [locLoading, setLocLoading] = useState(false);
   const [locError, setLocError] = useState("");
+  const [locApprox, setLocApprox] = useState(false); // true = IP-based (approximate)
 
-  const detectLocation = () => {
-    if (!navigator.geolocation) {
-      setLocError("Geolocation not supported by your browser.");
-      return;
+  /** Tier 2: IP-based location — no permission needed, works everywhere */
+  const detectByIP = async () => {
+    setLocApprox(false);
+    try {
+      const res = await fetch("https://ipapi.co/json/");
+      const d = await res.json();
+      if (d.error) throw new Error(d.reason);
+      const parts = [
+        d.city,
+        d.region,
+        d.country_name,
+        d.postal,
+      ].filter(Boolean);
+      setAddress(parts.join(", "));
+      setLocApprox(true); // flag that it's approximate
+      setLocError("");
+    } catch {
+      setLocError("Could not detect location. Please fill manually.");
+    } finally {
+      setLocLoading(false);
     }
+  };
+
+  /** Tier 1: precise GPS → reverse geocode. Falls back to IP on any failure. */
+  const detectLocation = () => {
     setLocLoading(true);
     setLocError("");
+    setLocApprox(false);
+
+    // If browser geolocation is unavailable, go straight to IP fallback
+    if (!navigator.geolocation || !window.isSecureContext) {
+      detectByIP();
+      return;
+    }
+
     navigator.geolocation.getCurrentPosition(
       async (pos) => {
         try {
@@ -837,17 +866,17 @@ function BuyModal({ quantity, setQuantity, onClose }: { quantity: number; setQua
             a.postcode,
           ].filter(Boolean);
           setAddress(parts.join(", "));
-        } catch {
-          setLocError("Could not fetch address. Fill manually.");
-        } finally {
           setLocLoading(false);
+        } catch {
+          // GPS succeeded but reverse geocode failed → try IP
+          detectByIP();
         }
       },
       () => {
-        setLocLoading(false);
-        setLocError("Location access denied. Please fill manually.");
+        // Permission denied or unavailable → silently fall back to IP
+        detectByIP();
       },
-      { timeout: 8000 }
+      { timeout: 6000, maximumAge: 60000 }
     );
   };
 
